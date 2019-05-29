@@ -12,6 +12,8 @@ const knexConfig = {
 
 const db = knex(knexConfig);
 
+// GET - return array of all cohorts
+
 router.get('/', async (req,res) => {
     try {
         const cohorts = await db('cohorts');
@@ -20,6 +22,24 @@ router.get('/', async (req,res) => {
         res.status(500).json(err);
     } 
 })
+
+
+router.get('/:id', async (req, res) => {
+    // get the roles from the database
+    try {
+      const cohort = await db('cohorts')
+        .where({ id: req.params.id })
+        .first();
+        if(cohort) {
+            res.status(200).json(cohort);
+        } else {
+            res.status(500).json({message: 'ID does not exist'})
+        }
+    } catch (error) {
+      res.status(500).json({ message: 'Something went wrong' });
+    }
+  });
+
 
 
 module.exports = router;
