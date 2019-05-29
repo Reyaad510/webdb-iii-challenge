@@ -24,6 +24,8 @@ router.get('/', async (req,res) => {
 })
 
 
+// GET roles by ID
+
 router.get('/:id', async (req, res) => {
     // get the roles from the database
     try {
@@ -37,6 +39,23 @@ router.get('/:id', async (req, res) => {
         }
     } catch (error) {
       res.status(500).json({ message: 'Something went wrong' });
+    }
+  });
+
+
+  // Create - Create new cohort
+router.post('/', async (req, res) => {
+    try {
+      const [id] = await db('cohorts').insert(req.body);
+  
+      const cohort = await db('cohorts')
+        .where({ id })
+        .first();
+  
+      res.status(201).json(cohort);
+    } catch (error) {
+      const message = errors[error.errno] || 'We ran into an error';
+      res.status(500).json({ message, error });
     }
   });
 
