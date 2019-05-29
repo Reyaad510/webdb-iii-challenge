@@ -60,6 +60,7 @@ router.post('/', async (req, res) => {
   });
 
 
+  // Update - Update Cohort
   router.put('/:id', async (req, res) => {
     try {
       const count = await db('cohorts')
@@ -78,6 +79,21 @@ router.post('/', async (req, res) => {
     } catch (error) {}
   });
 
+  // Delete - Delete cohort
+router.delete('/:id', async (req, res) => {
+    try {
+      const count = await db('cohorts')
+        .where({ id: req.params.id })
+        .del();
+  
+      if (count > 0) {
+        res.status(204).end();
+      } else {
+        res.status(404).json({ message: 'Records not found' });
+      }
+    } catch (error) {}
+  });
+  
 
 module.exports = router;
 
